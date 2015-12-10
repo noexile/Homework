@@ -1,7 +1,7 @@
 
 public class Call {
 	
-	double priceForAMinute;
+	static double priceForAMinute;
 	double duration;
 	GSM caller;
 	GSM receiver;
