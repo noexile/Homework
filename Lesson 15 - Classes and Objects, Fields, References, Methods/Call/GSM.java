@@ -34,7 +34,7 @@ public class GSM {
 	}
 	
 	void call(GSM receiver, double duration) {
-		if (duration > 0 && !receiver.toString().equals(simMobileNumber) && (this.hasSimCard != receiver.hasSimCard)) {
+		if (duration > 0 && !this.simMobileNumber.equals(receiver.simMobileNumber) && (this.hasSimCard != receiver.hasSimCard)) {
 			this.lastOutgoingCall = receiver.simMobileNumber;
 			receiver.lastIncommingCall = this.simMobileNumber;
 			this.outgoingCallsDuration += duration;
