@@ -27,7 +27,7 @@ public class Task {
 	}
 	
 	public void setWorkingHours(int workingHours) {
-		if (workingHours < 1) {
+		if (workingHours < 0) {
 			return;
 		}
 		this.workingHours = workingHours;

@@ -45,10 +45,11 @@ public class Employee {
 		
 		if (this.currentTask != null) {
 			if(this.currentTask.getWorkingHours() <= this.getHoursLeft()) {
-				this.currentTask.setWorkingHours(0);
 				this.hoursLeft -= this.currentTask.getWorkingHours();
+				this.currentTask.setWorkingHours(0);
 			} else {
 				this.currentTask.setWorkingHours(this.currentTask.getWorkingHours() - this.getHoursLeft());
+				this.hoursLeft = 0;
 			}
 			
 			showReport();
@@ -57,9 +58,9 @@ public class Employee {
 	
 	private void showReport() {
 		System.out.println("Worker name: " + this.getName());
-		System.out.println("Work order name: " + currentTask.getTaskName());
+		System.out.println("Work order name: " + this.currentTask.getTaskName());
 		System.out.println("Working hours left: " + this.getHoursLeft());
-		System.out.println("Order's hours left: " + currentTask.getWorkingHours());
+		System.out.println("Order's hours left: " + this.currentTask.getWorkingHours());
 		System.out.println();
 	}
 	
