@@ -6,6 +6,9 @@ public class Employee {
 	private Task currentTask;
 	private int hoursLeft;
 	
+	AllWork allWork; // референция към множеството от всичките задачи. Всички работници работят с едно множество от задачи.
+	Employee employee; // ??? String ???
+		
 	Employee(String name) {
 		setName(name);
 	}
@@ -62,6 +65,21 @@ public class Employee {
 		System.out.println("Working hours left: " + this.getHoursLeft());
 		System.out.println("Order's hours left: " + this.currentTask.getWorkingHours());
 		System.out.println();
+	}
+	
+	// TODO
+	void startWorkingDay() {
+		
+	}
+	
+	// TODO
+//	AllWork getAllWork() {
+//		return allwork;		
+//	}
+	
+	// TODO
+	void setAllWork(AllWork allWork) {
+		
 	}
 	
 }	
