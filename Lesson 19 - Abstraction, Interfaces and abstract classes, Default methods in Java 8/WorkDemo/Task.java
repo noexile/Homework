@@ -23,7 +23,7 @@ public class Task {
 	}
 	
 	public int getWorkingHours() {
-		return workingHours;
+		return this.workingHours;
 	}
 	
 	public void setWorkingHours(int workingHours) {
