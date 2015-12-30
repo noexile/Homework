@@ -15,6 +15,7 @@ public class AllWork {
 	void addTask(Task task) {
 		if (getFreePlacesForTasks() == 0) {
 			System.out.println("Maximum task limit is reached: " + tasks.length);
+			System.out.println("You cannot ");
 			return;
 		}
 
@@ -34,7 +35,6 @@ public class AllWork {
 		return tasks[taskNumber];
 	}
 	
-	// TODO
 	boolean isAllWorkDone() {
 		int counter = tasks.length;
 		

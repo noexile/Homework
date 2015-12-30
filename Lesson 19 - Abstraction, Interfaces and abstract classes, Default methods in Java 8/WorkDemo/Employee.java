@@ -24,37 +24,31 @@ public class Employee {
 		this.allWork = allWork;
 	}
 
-	// TODO
-	void work() {
-		
-		if (this.currentTask == null) {
-			this.setCurrentTask(allWork.getNextTask());
-			System.out.println(this.getName() + " starts working on task " + this.currentTask.getTaskName());
+	public void work() {
+		if (currentTask == null) {
+			setCurrentTask(allWork.getNextTask());
 		}
-		if (this.allWork.getCurrentUnassugnedTask() < allWork.tasks.length) {
-			if (this.currentTask.getWorkingHours() <= this.getHoursLeft()) {
-				this.setHoursLeft(getHoursLeft() - this.currentTask.getWorkingHours());
-				showReport();
-				this.setCurrentTask(allWork.getNextTask());
-				System.out.println(this.getName() + " starts working on task " + this.currentTask.getTaskName());
-				this.currentTask.setWorkingHours(this.currentTask.getWorkingHours() - this.getHoursLeft());
-				this.setHoursLeft(0);
-			} else {
-				this.currentTask.setWorkingHours(this.currentTask.getWorkingHours() - this.getHoursLeft());
-				this.setHoursLeft(0);
+		
+		while(this.hoursLeft > 0 && currentTask != null) {
+			if (currentTask == null) {
+				break;
 			}
+			
+			int hoursForWork = this.hoursLeft;
+			if(this.hoursLeft > currentTask.getWorkingHours()) {
+				hoursForWork = currentTask.getWorkingHours();
+			}
+			hoursLeft -= hoursForWork;
+			currentTask.setWorkingHours(currentTask.getWorkingHours() - hoursForWork);
 			showReport();
-		} else {
-			System.out.println(this.name + " has finished work.");
+			if (currentTask.getWorkingHours() == 0) {
+				setCurrentTask(allWork.getNextTask());
+			}
 		}
 	}
 
-	public void showReport() {
 
-		if (allWork.getCurrentUnassugnedTask() > 9) {
-			System.out.println(this.name + " finished work.");
-			return;
-		}
+	public void showReport() {
 
 		System.out.println("Worker name: " + this.getName());
 		System.out.println("Work order name: " + this.currentTask.getTaskName());

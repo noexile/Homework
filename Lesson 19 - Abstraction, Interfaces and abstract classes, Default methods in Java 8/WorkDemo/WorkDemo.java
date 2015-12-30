@@ -16,8 +16,8 @@ public class WorkDemo {
 		Task task8 = new Task("rezhi gredi", 18);
 		Task task9 = new Task("boiadisvai", 20);
 		Task task10 = new Task("prepravyai zidaria", 26);
-//		Task task11 = new Task("slagai prozorci0", 12);
-//		Task task12 = new Task("plashtai zaplati", 2);
+		Task task11 = new Task("slagai prozorci", 12);
+		Task task12 = new Task("plashtai zaplati", 2);
 		
 		
 		
@@ -31,8 +31,8 @@ public class WorkDemo {
 		stroezha.addTask(task8);
 		stroezha.addTask(task9);
 		stroezha.addTask(task10);
-//		stroezha.addTask(task11);
-//		stroezha.addTask(task12);
+		stroezha.addTask(task11);
+		stroezha.addTask(task12);
 		
 		Employee ivan = new Employee("Bai Ivan");
 		Employee hasan = new Employee("Hasan Fevzi");
@@ -44,7 +44,6 @@ public class WorkDemo {
 		
 		int day = 1;
 		
-		// TODO checker
 		do {
 			System.out.println("Day: " + day++);
 			ivan.startWorkingDay();
