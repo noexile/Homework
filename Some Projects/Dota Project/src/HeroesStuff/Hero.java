@@ -10,12 +10,26 @@ public class Hero {
 	
 	private boolean alive;
 	
+	// TODO 
+	// sight range
+	
+	// TODO
+	// attack range
+	// enemy in attack range
+	// range ?
+		
+	// TODO
+	// attack speed
+	
 	private int lowDamageDealt;
 	private int highDamageDealth;
 	private int movementSpeed;
 	
 	private double baseArmor;
 	private double mainArmor;
+	
+	// TODO
+	// magic resistance
 
 	private int level;
 	private final int maxLevel = 25;
@@ -28,20 +42,24 @@ public class Hero {
 	private double agilityGrowth;
 	private double inteligenceGrowth;
 	
-	private final String[] mainAttribute = { "strength", "agility", "inteligence" };
+	private final String[] mainAttribute = new String[1];
 	private Items[] backpack;
 	
-	public Hero(String heroName, int health, int mana, int lowDamageDealt, int highDamageDealth, double baseArmor, int movementSpeed, double strength, double agility, double inteligence, double strengthGrowth, double agilityGrowth, double inteligenceGrowth) {
+	public Hero(String heroName, String mainAttribute, int health, int mana, int lowDamageDealt, int highDamageDealth, double baseArmor, int movementSpeed, double strength, double agility, double inteligence, double strengthGrowth, double agilityGrowth, double inteligenceGrowth) {
 		setHeroName(heroName);
 		
 		setHealth(health);
 		setMana(mana);
+		
+		// TODO
+		// main attribute
 		
 		setLowDamageDealt(lowDamageDealt);
 		setHighDamageDealth(highDamageDealth);
 		setBaseArmor(baseArmor);
 		setMovementSpeed(movementSpeed);
 		
+		setMainArmor();
 		setStrength(strength);
 		setAgility(agility);
 		setInteligence(inteligence);
@@ -63,11 +81,21 @@ public class Hero {
 	// manaPointsRegen();
 	
 	public void attack(Hero damagedHero) {
+		
 		Random rand = new Random();
 		int damage = rand.nextInt(getHighDamageDealth()) + getLowDamageDealt();
 		
-		damage = (int) ((damage * getMainArmor()) / 100);		
-		damagedHero.setHealth(damagedHero.getHealth() - damage);
+		if (mainAttribute[0].equalsIgnoreCase("strength")) {
+			damage += getStrength();
+		} else if (mainAttribute[0].equalsIgnoreCase("agility")) {
+			damage += getAgility();
+		} else {
+			damage += getInteligence();
+		}
+		
+		damage = (int) ((damage * damagedHero.getMainArmor()) / 100);
+		
+		damagedHero.setHealth((int)(damagedHero.getHealth() - damage));
 	}
 	
 	public void levelUp() {
@@ -93,13 +121,26 @@ public class Hero {
 		System.out.println(this.heroName + " has died.");
 	}
 	
+	// TODO
+	public void printHeroInfo() {
+		
+	}
 	
 	/*
 	 * 
 	Getters and Setters below
 	*
 	*/
-	public String getHeroName() {
+	
+	private void setMainAttribute(String mainAttribute) {
+		this.mainAttribute[0] = mainAttribute;
+	}
+	
+	private String getMainAttribute() {
+		return this.mainAttribute[0];
+	}
+	
+	private String getHeroName() {
 		return this.heroName;
 	}
 
@@ -126,7 +167,7 @@ public class Hero {
 	}
 
 	private void setMana(int mana) {
-		this.mana = mana;
+		this.mana = (int) (mana + (getInteligence() * 13));
 	}
 
 	private double getBaseArmor() {
@@ -142,7 +183,7 @@ public class Hero {
 	}
 
 	private void setMainArmor() {
-		this.mainArmor = ((getBaseArmor() * 0.06) / (1 + 0.06 + getBaseArmor())) * 100;
+		this.mainArmor = (((getBaseArmor() + getAgility() * 0.14) * 0.06) / (1 + 0.06 + (getBaseArmor() + getAgility() * 0.14))) * 100;
 	}
 
 	private int getMovementSpeed() {
@@ -199,10 +240,6 @@ public class Hero {
 
 	private void setBackpack(Items[] backpack) {
 		this.backpack = backpack;
-	}
-
-	private String[] getMainAttribute() {
-		return this.mainAttribute;
 	}
 
 	private int getMaxLevel() {
