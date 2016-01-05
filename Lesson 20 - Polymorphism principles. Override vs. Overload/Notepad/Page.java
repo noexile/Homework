@@ -4,9 +4,13 @@ public class Page {
 	private String title;
 	private String text;
 	
+	Page(String title, String text) {
+		setTitle(title);
+		setText(text);
+	}
 	
 	void addText(String newText) {
-		this.text += newText;
+		setText(getText() + newText);
 	}
 	
 	void deleteText() {
@@ -18,6 +22,22 @@ public class Page {
 		text.append(getTitle()).append("/n").append(getText());
 		
 		return text.toString();
+	}
+	
+	boolean searchWord(String word) {
+		if (getText().contains(word)) {
+			return true;
+		}
+		
+		return false;
+	}
+	
+	boolean containsDigits() {
+		if(getText().matches(".*\\d.*")) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	// getters and setters

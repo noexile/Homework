@@ -7,20 +7,18 @@ public class SecuredNotepad extends SimpleNotepad{
 	private String password;
 	private String enteredPassword;
 	private boolean isLocked;
+
 	
-	public SecuredNotepad() {
-		
+	public SecuredNotepad(String password) {
+		setPassword(password);
 	}
 	
-	
-	// TODO
-	// password check on all methods
 	@Override
 	public void addTextToPage(String text, int pageNumber) {
 		
 		checkPassword(inputPassword());
 		
-		if (isLocked) {
+		if (isLocked()) {
 			System.out.println("Incorrect password.");
 			return;
 		}
@@ -34,6 +32,14 @@ public class SecuredNotepad extends SimpleNotepad{
 
 	@Override
 	public void replaceTextOfPage(String text, int pageNumber) {
+		
+		checkPassword(inputPassword());
+		
+		if (isLocked()) {
+			System.out.println("Incorrect password.");
+			return;
+		}
+		
 		boolean checker = checkIfPageIsInTheNotePad(pageNumber);
 		
 		if (checker) {
@@ -45,6 +51,14 @@ public class SecuredNotepad extends SimpleNotepad{
 
 	@Override
 	public void removeTextFromPage(int pageNumber) {
+		
+		checkPassword(inputPassword());
+		
+		if (isLocked()) {
+			System.out.println("Incorrect password.");
+			return;
+		}
+		
 		boolean checker = checkIfPageIsInTheNotePad(pageNumber);
 		
 		if (checker) {
@@ -55,6 +69,14 @@ public class SecuredNotepad extends SimpleNotepad{
 
 	@Override
 	public void printAllPages() {
+		
+		checkPassword(inputPassword());
+		
+		if (isLocked()) {
+			System.out.println("Incorrect password.");
+			return;
+		}
+		
 		for (int i = 0; i < page.length; i++) {
 			if (page[i] != null) {
 				page[i].showText();
@@ -81,7 +103,7 @@ public class SecuredNotepad extends SimpleNotepad{
 	private String getPassword() {
 		return this.password;
 	}
-
+	
 	private void setPassword(String password) {
 		this.password = password;
 	}
