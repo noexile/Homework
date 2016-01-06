@@ -7,9 +7,17 @@ public class SecuredNotepad extends SimpleNotepad{
 	private String password;
 	private String enteredPassword;
 	
-	SecuredNotepad(String password) {
+	protected SecuredNotepad(String password) {
 		super();
 		setPassword(password);
+	}
+	
+	public static SecuredNotepad createNewSecuredNotepad(String password) {
+		if (isStrongPassword(password)) {
+			return new SecuredNotepad(password);
+		}
+		
+		return null;
 	}
 	
 	@Override
@@ -90,7 +98,7 @@ public class SecuredNotepad extends SimpleNotepad{
 		
 	}
 	
-	private boolean checkPassword() {
+	protected boolean checkPassword() {
 		String pass = inputPassword();
 		
 		if (pass.equals(getPassword())) {
@@ -108,6 +116,39 @@ public class SecuredNotepad extends SimpleNotepad{
 		return getEnteredPassword();
 	}
 	
+	private static boolean isStrongPassword(String pass) {
+		if(pass.length() < 5) {
+			System.out.println("The entered password is short!");
+			return false;
+		}
+
+		if(!containsSybmol(pass, '0', '9')) {
+			System.out.println("The entered password is weak!");
+			return false;
+		}
+
+		if(!containsSybmol(pass, 'a', 'z')) {
+			System.out.println("The entered password is weak!");
+			return false;
+		}
+
+		if(!containsSybmol(pass, 'A', 'Z')) {
+			System.out.println("The entered password is weak!");
+			return false;
+		}
+			
+		return true;
+	}
+	
+	private static boolean containsSybmol(String text, char start, char end) {
+		for (int i = 0; i < text.length(); i++) {
+			if(start <= text.charAt(i) && text.charAt(i) <= end) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	// getters and setters
 	private String getPassword() {
 		return this.password;
@@ -117,11 +158,11 @@ public class SecuredNotepad extends SimpleNotepad{
 		this.password = password;
 	}
 	
-	private String getEnteredPassword() {
+	protected String getEnteredPassword() {
 		return enteredPassword;
 	}
 
-	private void setEnteredPassword(String enteredPassword) {
+	protected void setEnteredPassword(String enteredPassword) {
 		this.enteredPassword = enteredPassword;
 	}
 	

@@ -5,7 +5,7 @@ public class SimpleNotepad implements INotepad {
 	private static final int TOTAL_PAGE_NUMBERS = 10;
 	Page[] page;
 	
-	SimpleNotepad() {
+	public SimpleNotepad() {
 		page = new Page[TOTAL_PAGE_NUMBERS];
 		for (int i = 0; i < TOTAL_PAGE_NUMBERS; i++) {
 			page[i] = new Page("Page " + (i + 1), "");
