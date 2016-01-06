@@ -6,5 +6,7 @@ public interface INotepad {
 	void replaceTextOfPage(String text, int pageNumber);
 	void removeTextFromPage(int pageNumber);
 	void printAllPages();
+	boolean searchWord(String word);
+	void printAllPagesWithDigits();
 	
 }

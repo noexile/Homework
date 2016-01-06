@@ -2,39 +2,55 @@ package Notepad;
 
 public class SimpleNotepad implements INotepad {
 	
+	private static final int TOTAL_PAGE_NUMBERS = 10;
 	Page[] page;
-	private final int totalPageNumbers = 10;
 	
-	public SimpleNotepad() {
-		page = new Page[totalPageNumbers];
+	SimpleNotepad() {
+		page = new Page[TOTAL_PAGE_NUMBERS];
+		for (int i = 0; i < TOTAL_PAGE_NUMBERS; i++) {
+			page[i] = new Page("Page " + (i + 1), "");
+		}
 	}
-
+	
+	@Override
+	public boolean searchWord(String word) {
+		for (int i = 0; i < page.length; i++) {
+			if (page[i] != null && page[i].searchWord(word)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public void printAllPagesWithDigits() {
+		for (int i = 0; i < page.length; i++) {
+			if(page[i] != null && page[i].contaisDigit()) {
+				System.out.println(page[i].showText());
+			}
+		}
+	}
+	
 	@Override
 	public void addTextToPage(String text, int pageNumber) {
-		boolean checker = checkIfPageIsInTheNotePad(pageNumber);
-		
-		if (checker) {
-			page[pageNumber].addText(text);		
+		if (checkIfPageIsInTheNotePad(pageNumber)) {
+			page[pageNumber - 1].addText(text);		
 		}
 	}
 
 	@Override
 	public void replaceTextOfPage(String text, int pageNumber) {
-		boolean checker = checkIfPageIsInTheNotePad(pageNumber);
-		
-		if (checker) {
-			page[pageNumber].deleteText();
-			page[pageNumber].addText(text);		
+		if (checkIfPageIsInTheNotePad(pageNumber)) {
+			page[pageNumber - 1].deleteText();
+			page[pageNumber - 1].addText(text);		
 		}
 		
 	}
 
 	@Override
 	public void removeTextFromPage(int pageNumber) {
-		boolean checker = checkIfPageIsInTheNotePad(pageNumber);
-		
-		if (checker) {
-			page[pageNumber].deleteText();	
+		if (checkIfPageIsInTheNotePad(pageNumber)) {
+			page[pageNumber - 1].deleteText();	
 		}
 		
 	}
@@ -43,25 +59,18 @@ public class SimpleNotepad implements INotepad {
 	public void printAllPages() {
 		for (int i = 0; i < page.length; i++) {
 			if (page[i] != null) {
-				page[i].showText();
+				System.out.println(page[i].showText());
 			}
 		}
 		
 	}
 	
-	boolean checkIfPageIsInTheNotePad(int pageNumber) {
-		if (pageNumber > getTotalPageNumbers() || pageNumber < 0) {
-			System.out.println("There is no such page in our notepad. The maximum page number is: " + getTotalPageNumbers());
-			return false;
+	protected boolean checkIfPageIsInTheNotePad(int pageNumber) {
+		if(pageNumber > 0 && pageNumber <= TOTAL_PAGE_NUMBERS) {
+			return true;
 		}
-		
-		return true;
-	}
-	
-	// getters and setters
-	
-	private int getTotalPageNumbers() {
-		return totalPageNumbers;
+		System.out.println("Invalid page number.");
+		return false;
 	}
 	
 }

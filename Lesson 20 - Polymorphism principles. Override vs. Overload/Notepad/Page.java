@@ -4,7 +4,7 @@ public class Page {
 	private String title;
 	private String text;
 	
-	Page(String title, String text) {
+	public Page(String title, String text) {
 		setTitle(title);
 		setText(text);
 	}
@@ -18,25 +18,19 @@ public class Page {
 	}
 	
 	String showText() {
-		StringBuilder text = new StringBuilder();
-		text.append(getTitle()).append("/n").append(getText());
-		
-		return text.toString();
+		return title + "\n" + text;
 	}
 	
 	boolean searchWord(String word) {
-		if (getText().contains(word)) {
-			return true;
-		}
-		
-		return false;
+		return getText().contains(word);
 	}
 	
-	boolean containsDigits() {
-		if(getText().matches(".*\\d.*")) {
-			return true;
+	boolean contaisDigit() {
+		for (int i = 0; i < text.length(); i++) {
+			if (Character.isDigit(text.charAt(i))) {
+				return true;
+			}
 		}
-		
 		return false;
 	}
 	
