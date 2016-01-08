@@ -24,6 +24,7 @@ public class Shop {
 		setMoneyInCashRegister(moneyInCashRegister);
 		this.productLimit = productLimit;
 		setFreePlacesForProducts(productLimit);
+		productList = new Product[productLimit];
 	}
 	
 	void addProduct(Product product) {

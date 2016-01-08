@@ -9,9 +9,6 @@ public class PieceProduct extends Product {
 		setQuantity(quantity);
 	}
 	
-	double sellProduct(int quantity) {
-		return this.getPrice() * quantity;
-	}
 	
 	// getters and setters
 	public int getQuantity() {

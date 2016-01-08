@@ -8,10 +8,6 @@ public class QuantityProduct extends Product {
 		super(name, price);
 		setQuantity(quantity);
 	}
-	
-	double sellProduct(double quantity) {
-		return this.getPrice() * quantity;
-	}
 
 	
 	// getters and setters

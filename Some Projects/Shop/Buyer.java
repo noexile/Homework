@@ -32,19 +32,22 @@ public class Buyer {
 		this.cartFreePlaces = maxPiecesThatCanBeBough;
 	}
 	
-	void payShop(double totalAmount) {
-		if (getMoney() < totalAmount) {
+	void payShop() {
+		if (getMoney() < getAmmountToPay()) {
 			System.out.println("Not enough money.");
+			return;
 		}
-		setMoney(getMoney() - totalAmount);
-		getEnteredShop().setMoneyInCashRegister(getEnteredShop().getMoneyInCashRegister() + totalAmount);
+		setMoney(getMoney() - getAmmountToPay());
+		getEnteredShop().setMoneyInCashRegister(getEnteredShop().getMoneyInCashRegister() + getAmmountToPay());
+		System.out.println("ammount to pay: " + getAmmountToPay());
+		System.out.println("client's money: " + getMoney());
 	}
 	
 	void addPieceProductToCart(PieceProduct product, int quantity) {
 		if (freePlacesValidation()) {
 			return;
 		}
-		if (getMoney() < getAmmountToPay() + product.sellProduct(quantity)) {
+		if (getMoney() < getAmmountToPay() + (product.getPrice() * quantity)) {
 			System.out.println("Cannot add product to cart - not enough money.");
 			return;
 		}
@@ -60,7 +63,7 @@ public class Buyer {
 			}
 		}
 		
-		setAmmountToPay(getAmmountToPay() + product.sellProduct(quantity));
+		setAmmountToPay(getAmmountToPay() + (product.getPrice() * quantity));
 		productCart[productCart.length - cartFreePlaces--] = product;
 	}
 
@@ -68,7 +71,7 @@ public class Buyer {
 		if (freePlacesValidation()) {
 			return;
 		}
-		if (getMoney() < getAmmountToPay() + product.sellProduct(quantity)) {
+		if (getMoney() < getAmmountToPay() + (product.getPrice() * quantity)) {
 			System.out.println("Cannot add product to cart - not enough money.");
 			return;
 		}
@@ -84,18 +87,44 @@ public class Buyer {
 			}
 		}
 		
-		setAmmountToPay(getAmmountToPay() + product.sellProduct(quantity));
+		setAmmountToPay(getAmmountToPay() + (product.getPrice() * quantity));
 		productCart[productCart.length - cartFreePlaces--] = product;
 	}
 	
-	// TODO
 	void removePieceProductFromCart(PieceProduct product, int quantity) {
 		
+		if (!containsProduct(product)) {
+			System.out.println("The item is not added to the cart.");
+			return;
+		}
+		
+		for (int i = 0; i < enteredShop.productLimit; i++) {
+			if(enteredShop.productList[i].equals(product)) {
+				enteredShop.productList[i].pieceProduct.setQuantity(enteredShop.productList[i].pieceProduct.getQuantity() + quantity);
+				break;
+			}
+		}
+		
+		setAmmountToPay(getAmmountToPay() - (product.getPrice() * quantity));
+		cartFreePlaces++;
 	}
 	
-	// TODO
 	void removeQuantityProductFromCart(QuantityProduct product, double quantity) {
-			
+		if (!containsProduct(product)) {
+			System.out.println("The item is not added to the cart.");
+			return;
+		}
+		
+		for (int i = 0; i < enteredShop.productLimit; i++) {
+			if(enteredShop.productList[i].equals(product)) {
+				enteredShop.productList[i].quantityProduct.setQuantity(enteredShop.productList[i].quantityProduct.getQuantity() + quantity);
+				break;
+			}
+		}
+		
+		setAmmountToPay(getAmmountToPay() - (product.getPrice() * quantity));
+		cartFreePlaces++;
+		
 	}
 		
 	boolean freePlacesValidation() {
@@ -103,6 +132,20 @@ public class Buyer {
 			System.out.println("Not enough free places in the cart.");
 			return false;
 		}
+		return true;
+	}
+	
+	boolean containsProduct(Product product) {
+		
+		for (int i = 0; i < productCart.length; i++) {
+			if (productCart[i] == null) {
+				continue;
+			}
+			if (!productCart[i].equals(product)) {
+				return false;
+			}
+		}
+		
 		return true;
 	}
 	
