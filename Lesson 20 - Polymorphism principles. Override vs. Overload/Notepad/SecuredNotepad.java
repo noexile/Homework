@@ -6,45 +6,64 @@ public class SecuredNotepad extends SimpleNotepad{
 	
 	private String password;
 	private String enteredPassword;
-	private boolean isLocked;
-
 	
-	public SecuredNotepad(String password) {
+	protected SecuredNotepad(String password) {
+		super();
 		setPassword(password);
+	}
+	
+	public static SecuredNotepad createNewSecuredNotepad(String password) {
+		if (isStrongPassword(password)) {
+			return new SecuredNotepad(password);
+		}
+		
+		return null;
+	}
+	
+	@Override
+	public boolean searchWord(String word) {
+		
+		if (checkPassword()) {
+			System.out.println("Incorrect password.");
+			return false;
+		}
+		
+		return super.searchWord(word);
+	}
+	
+	@Override
+	public void printAllPagesWithDigits() {
+		if (checkPassword()) {
+			System.out.println("Incorrect password.");
+			return;
+		}
+		
+		super.printAllPagesWithDigits();
 	}
 	
 	@Override
 	public void addTextToPage(String text, int pageNumber) {
 		
-		checkPassword(inputPassword());
-		
-		if (isLocked()) {
+		if (checkPassword()) {
 			System.out.println("Incorrect password.");
 			return;
 		}
 		
-		boolean checker = checkIfPageIsInTheNotePad(pageNumber);
-		
-		if (checker) {
-			page[pageNumber].addText(text);		
+		if (checkIfPageIsInTheNotePad(pageNumber)) {
+			super.addTextToPage(text, pageNumber);	
 		}
 	}
 
 	@Override
 	public void replaceTextOfPage(String text, int pageNumber) {
 		
-		checkPassword(inputPassword());
-		
-		if (isLocked()) {
+		if (checkPassword()) {
 			System.out.println("Incorrect password.");
 			return;
 		}
 		
-		boolean checker = checkIfPageIsInTheNotePad(pageNumber);
-		
-		if (checker) {
-			page[pageNumber].deleteText();
-			page[pageNumber].addText(text);		
+		if (checkIfPageIsInTheNotePad(pageNumber)) {
+			super.replaceTextOfPage(text, pageNumber);
 		}
 		
 	}
@@ -52,17 +71,13 @@ public class SecuredNotepad extends SimpleNotepad{
 	@Override
 	public void removeTextFromPage(int pageNumber) {
 		
-		checkPassword(inputPassword());
-		
-		if (isLocked()) {
+		if (checkPassword()) {
 			System.out.println("Incorrect password.");
 			return;
 		}
 		
-		boolean checker = checkIfPageIsInTheNotePad(pageNumber);
-		
-		if (checker) {
-			page[pageNumber].deleteText();	
+		if (checkIfPageIsInTheNotePad(pageNumber)) {
+			super.removeTextFromPage(pageNumber);
 		}
 		
 	}
@@ -70,33 +85,68 @@ public class SecuredNotepad extends SimpleNotepad{
 	@Override
 	public void printAllPages() {
 		
-		checkPassword(inputPassword());
-		
-		if (isLocked()) {
+		if (checkPassword()) {
 			System.out.println("Incorrect password.");
 			return;
 		}
 		
 		for (int i = 0; i < page.length; i++) {
 			if (page[i] != null) {
-				page[i].showText();
+				System.out.println(page[i].showText());
 			}
 		}
 		
 	}
 	
-	private void checkPassword(String password) {
-		if (getPassword().equals(password)) {
-			setLocked(false);
+	protected boolean checkPassword() {
+		String pass = inputPassword();
+		
+		if (pass.equals(getPassword())) {
+			return false;
 		}
+		return true;
 	}
 	
 	private String inputPassword() {
+		System.out.print("Enter password: ");
 		Scanner input = new Scanner(System.in);
+		System.out.println();
 		setEnteredPassword(input.nextLine());
 		
-		input.close();
 		return getEnteredPassword();
+	}
+	
+	private static boolean isStrongPassword(String pass) {
+		if(pass.length() < 5) {
+			System.out.println("The entered password is short!");
+			return false;
+		}
+
+		if(!containsSybmol(pass, '0', '9')) {
+			System.out.println("The entered password is weak!");
+			return false;
+		}
+
+		if(!containsSybmol(pass, 'a', 'z')) {
+			System.out.println("The entered password is weak!");
+			return false;
+		}
+
+		if(!containsSybmol(pass, 'A', 'Z')) {
+			System.out.println("The entered password is weak!");
+			return false;
+		}
+			
+		return true;
+	}
+	
+	private static boolean containsSybmol(String text, char start, char end) {
+		for (int i = 0; i < text.length(); i++) {
+			if(start <= text.charAt(i) && text.charAt(i) <= end) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	// getters and setters
@@ -107,20 +157,12 @@ public class SecuredNotepad extends SimpleNotepad{
 	private void setPassword(String password) {
 		this.password = password;
 	}
-
-	private boolean isLocked() {
-		return this.isLocked;
-	}
-
-	private void setLocked(boolean isLocked) {
-		this.isLocked = isLocked;
-	}
 	
-	private String getEnteredPassword() {
+	protected String getEnteredPassword() {
 		return enteredPassword;
 	}
 
-	private void setEnteredPassword(String enteredPassword) {
+	protected void setEnteredPassword(String enteredPassword) {
 		this.enteredPassword = enteredPassword;
 	}
 	
