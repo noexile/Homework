@@ -16,8 +16,6 @@ public abstract class Product {
 	
 	private String name;
 	private double price;
-	QuantityProduct quantityProduct;
-	PieceProduct pieceProduct;
 	
 	Product (String name, double price) {
 		setName(name);

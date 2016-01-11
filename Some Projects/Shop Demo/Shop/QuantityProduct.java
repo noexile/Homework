@@ -4,7 +4,7 @@ public class QuantityProduct extends Product {
 	
 	private double quantity;
 	
-	QuantityProduct(String name, double price, double quantity) {
+	public QuantityProduct(String name, double price, double quantity) {
 		super(name, price);
 		setQuantity(quantity);
 	}

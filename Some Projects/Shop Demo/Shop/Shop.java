@@ -18,16 +18,16 @@ public class Shop {
 	Product[] productList;
 	private int freePlacesForProducts;
 	
-	Shop (String name, String address, double moneyInCashRegister, int productLimit) {
+	public Shop (String name, String address, double moneyInCashRegister, int productLimit) {
 		setName(name);
 		setAddress(address);
 		setMoneyInCashRegister(moneyInCashRegister);
 		this.productLimit = productLimit;
 		setFreePlacesForProducts(productLimit);
-		productList = new Product[productLimit];
+		this.productList = new Product[productLimit];
 	}
 	
-	void addProduct(Product product) {
+	public void addProduct(Product product) {
 		if (getFreePlacesForProducts() < 1) {
 			System.out.println("Not enough free places for new products!");
 			return;
@@ -41,10 +41,18 @@ public class Shop {
 		setFreePlacesForProducts(getFreePlacesForProducts() - 1);
 	}
 	
-	// TODO
-	void removeProduct(Product product) {
-		
+	public void viewItemsInShop() {
+		for (int i = 0; i < productList.length; i++) {
+			if (productList[i] != null) {
+				if (productList[i] instanceof PieceProduct) {
+					System.out.println("Product: " + productList[i].getName() + " - " + ((PieceProduct) productList[i]).getQuantity() + " pcs.");
+				} else if(productList[i] instanceof QuantityProduct) {
+					System.out.println("Product: " + productList[i].getName() + " - " + ((QuantityProduct) productList[i]).getQuantity() + " kg.");
+				}
+			}
+		}
 	}
+	
 	
 	// getters and setters
 	String getName() {
