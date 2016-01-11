@@ -1,10 +1,10 @@
 package Creep;
 
-public class MegaMelleeCreep extends MelleeCreep {
+public class MegaMelleeCreep extends Creep {
 
-	MegaMelleeCreep() {
-		super("Mega Creep", mainAttribute, health, mana, lowDamageDealt, highDamageDealth, baseArmor, movementSpeed, strength, agility, inteligence, strengthGrowth, agilityGrowth, inteligenceGrowth);
-		// TODO Auto-generated constructor stub
+	public MegaMelleeCreep() {
+		super("Mega Mellee Creep", 1270, 0, 96, 104, 325, 3, 100, 800);
 	}
+
 
 }

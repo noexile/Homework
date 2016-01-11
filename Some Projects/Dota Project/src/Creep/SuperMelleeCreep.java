@@ -1,9 +1,9 @@
 package Creep;
 
-public class SuperMelleeCreep extends MelleeCreep {
+public class SuperMelleeCreep extends Creep {
 
-	SuperMelleeCreep(String heroName, int health, int mana, int lowDamageDealt, int highDamageDealth, double baseArmor,	int movementSpeed, double strength, double agility, double inteligence, double strengthGrowth, double agilityGrowth, double inteligenceGrowth) {
-		super(heroName, health, mana, lowDamageDealt, highDamageDealth, baseArmor, movementSpeed, strength, agility, inteligence, strengthGrowth, agilityGrowth, inteligenceGrowth);
+	public SuperMelleeCreep() {
+		super("Super Mellee Creep", 700, 0, 36, 44, 325, 3, 100, 800);
 	}
 
 }

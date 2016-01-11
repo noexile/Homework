@@ -1,9 +1,10 @@
 package Creep;
 
-public class SuperRangedCreep extends RangedCreep {
+public class SuperRangedCreep extends Creep {
 
-	public SuperRangedCreep(String heroName, int health, int mana, int lowDamageDealt, int highDamageDealth, double baseArmor, int movementSpeed, double strength, double agility, double inteligence, double strengthGrowth, double agilityGrowth, double inteligenceGrowth) {
-		super(heroName, health, mana, lowDamageDealt, highDamageDealth, baseArmor, movementSpeed, strength, agility, inteligence, strengthGrowth, agilityGrowth, inteligenceGrowth);
+	public SuperRangedCreep() {
+		super("Super Ranged Creep", 475, 500, 41, 46, 325, 1, 500, 800);
 	}
+
 	
 }
