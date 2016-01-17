@@ -19,43 +19,43 @@ public class Citizen {
 	
 	
 	// getters and setters
-	private String getFirstName() {
+	protected String getFirstName() {
 		return firstName;
 	}
 	
-	private void setFirstName(String firstName) {
+	protected void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 	
-	private String getMiddleName() {
+	protected String getMiddleName() {
 		return middleName;
 	}
 	
-	private void setMiddleName(String middleName) {
+	protected void setMiddleName(String middleName) {
 		this.middleName = middleName;
 	}
 	
-	private String getLastName() {
+	protected String getLastName() {
 		return lastName;
 	}
 	
-	private void setLastName(String lastName) {
+	protected void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 	
-	private String getAddress() {
+	protected String getAddress() {
 		return address;
 	}
 	
-	private void setAddress(String address) {
+	protected void setAddress(String address) {
 		this.address = address;
 	}
 	
-	private int getAge() {
+	protected int getAge() {
 		return age;
 	}
 	
-	private void setAge(int age) {
+	protected void setAge(int age) {
 		this.age = age;
 	}
 	

@@ -23,8 +23,18 @@ public class LegalEntity {
 
 	// methods
 
-	public void askQuestionToACitizen(Citizen citizen) {
-
+	public void askQuestionToACitizen(Citizen[] citizen) {
+		
+		for (int i = 0; i < citizen.length; i++) {
+			if (citizen[i] == null) {
+				continue;
+			}
+			takeNote();
+			return;
+		}
+	}
+	
+	public void askQuestionToDefendant(Defendant defendant) {
 		takeNote();
 	}
 

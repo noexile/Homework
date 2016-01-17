@@ -1,11 +1,9 @@
 package Court;
 
-public class Accuser extends Citizen {
+public class Accuser extends Defendant {
 	
-	Lawyer[] lawyerList;
-	
-	public Accuser(String firstName, String middleName, String lastName, String address, int age) {
-		super(firstName, middleName, lastName, address, age);
+	public Accuser(String firstName, String middleName, String lastName, String address, int age, int numberOfLawyers) {
+		super(firstName, middleName, lastName, address, age, numberOfLawyers);
 	}
 
 }
