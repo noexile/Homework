@@ -31,13 +31,11 @@ public abstract class TargovskiObekt {
 	}
 	
 	// methods
-	
 	protected static int setArea(int highNumber, int lowNumber) {
 		Random rand = new Random();
 		int temp = rand.nextInt((highNumber - lowNumber) + 1) + lowNumber;
 		return temp;
-	}
-	
+	}	
 	
 	// getters and setters
 	protected String getAddress() {
