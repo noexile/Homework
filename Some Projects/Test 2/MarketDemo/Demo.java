@@ -35,6 +35,7 @@ public class Demo {
 		targovci[1] = et;
 		targovci[2] = targovskaVeriga;
 		
-			
+		Targovec.startWork(targovci);
+		
 	}	
 }

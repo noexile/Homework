@@ -105,16 +105,17 @@ public class TargovskaVeriga extends Targovec {
 			this.targovskiObekt[currentTargovskiObekt].products[this.targovskiObekt[currentTargovskiObekt].products.length - this.targovskiObekt[currentTargovskiObekt].getFreePlacesForProducts()] = tempProduct;
 			this.targovskiObekt[currentTargovskiObekt].setFreePlacesForProducts(this.targovskiObekt[currentTargovskiObekt].getFreePlacesForProducts() - 1);
 			
-			System.out.print("Dostavchik " + dostavchik[temproraryDostavchik].getName() + " prodade stoka na " + this.getName() + " za ");
+			System.out.print(dostavchik[temproraryDostavchik].getName() + " prodade stoka na " + this.getName() + " za ");
 			if (dostavchik[temproraryDostavchik] instanceof DostavchikNaDrebno) {
 				System.out.println(price);
-				setMoney(getMoney() - price);
+				setMoney(getMoney() - tempProduct.getProductPrice());
 			} else if (dostavchik[temproraryDostavchik] instanceof DostavchikNaEdro) {
-				System.out.println(price - ((price / 100) * 15));
-				setMoney(getMoney() - (price - ((price / 100) * 15)));
+				System.out.println(tempProduct.getProductPrice() - ((tempProduct.getProductPrice() / 100) * 15));
+				setMoney(getMoney() - (tempProduct.getProductPrice() - ((tempProduct.getProductPrice() / 100) * 15)));
 			}
-		
+			
 		}
+		System.out.println("Total price: " + price + " lv.");
 	}
 
 }

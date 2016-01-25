@@ -1,7 +1,10 @@
-//	Р”Р° СЃРµ РёР·РІРёРєР° РјРµС‚РѕРґ, РєРѕР№С‚Рѕ РїСЂРёРµРјР° СЃРїРёСЃСЉРє РѕС‚ СЃСЉР·РґР°РґРµРЅРёС‚Рµ С‚СЉСЂРіРѕРІС†Рё Рё Р·Р° РІСЃРµРєРё С‚СЉСЂРіРѕРІРµС† СЃРµ Р·Р°РїРѕС‡РІР° С‚СЉСЂРіРѕРІСЃРєР° РґРµР№РЅРѕСЃС‚. РўСЉСЂРіРѕРІСЃРєР°С‚Р° РґРµР№РЅРѕСЃС‚ РїСЂРµРґСЃС‚Р°РІР»СЏРІР°:
-//	- РїРѕСЂСЉС‡РєР° РЅР° СЃС‚РѕРєРё РѕС‚ РґРѕСЃС‚Р°РІС‡РёРє Р·Р° РІСЃРµРєРё С‚СЉСЂРіРѕРІСЃРєРё РѕР±РµРєС‚. Р”Р° СЃРµ РёР·РІРµР¶РґР° РЅР° РµРєСЂР°РЅР° СЃРїРёСЃСЉРєР° СЃСЉСЃ СЃС‚РѕРєРё, СЃРѕСЂС‚РёСЂР°РЅ РїРѕ С†РµРЅР° РІ РЅР°СЂР°СЃС‚РІР°С‰ СЂРµРґ.
-//	- РїСЂРёР±РёСЂР°РЅРµ РЅР° РѕР±РѕСЂРѕС‚ РѕС‚ РІСЃРµРєРё С‚СЉСЂРіРѕРІСЃРєРё РѕР±РµРєС‚ вЂ“ РґР° СЃРµ РёР·РІРµР¶РґР° РЅР° РµРєСЂР°РЅР° РѕР±С‰Р°С‚Р° СЃСѓРјР° РЅР° РїРµС‡Р°Р»Р±Р°С‚Р°. РЎР»РµРґ РїСЂРѕРґР°Р¶Р±Р° СЃРїРёСЃСЉРєСЉС‚ СЃ РѕСЃС‚Р°РЅР°Р»РёС‚Рµ СЃС‚РѕРєРё РІ РјР°РіР°Р·РёРЅР° С‚СЂСЏР±РІР° РѕС‚РЅРѕРІРѕ РґР° Рµ СЃРѕСЂС‚РёСЂР°РЅ РїРѕ С†РµРЅР°.
-//	- РїР»Р°С‰Р°РЅРµ РЅР° РјРµСЃРµС‡РµРЅ РґР°РЅСЉРє РєСЉРј РґСЉСЂР¶Р°РІР°С‚Р° Р·Р° РІСЃРµРєРё С‚СЉСЂРіРѕРІСЃРєРё РѕР±РµРєС‚.
+//	Да се извика метод, който приема списък от създадените търговци и за всеки търговец се започва търговска дейност. Търговската дейност e:
+//	   - поръчка на стоки от доставчик за всеки търговски обект. Да се извежда на екрана списъка със стоки, сортиран по цена в нарастващ ред.
+
+//	   - прибиране на оборот от всеки търговски обект – да се извежда на екрана общата сума на печалбата. След продажба списъкът с
+//	     останалите стоки в магазина трябва отново да е сортиран по цена.
+
+//	   - плащане на месечен данък към държавата за всеки търговски обект.
 
 package Market;
 
@@ -9,7 +12,8 @@ import java.util.Random;
 
 public abstract class Targovec {
 	
-	private Random rand = new Random();
+	private static final int MAX_LIMIT_OF_PRODUCTS = 10_000;
+	private static Random rand = new Random();
 	private String name;
 	private String registrationAddress;
 	private int money;
@@ -25,6 +29,8 @@ public abstract class Targovec {
 		setMoney(money);
 		this.targovskiObekt = new TargovskiObekt[shops];
 		this.dostavchik = new Dostavchik[dostavchici];
+		this.products = new Product[MAX_LIMIT_OF_PRODUCTS];
+		setFreePlacesForProducts(MAX_LIMIT_OF_PRODUCTS);
 	}
 	
 	// methods
@@ -33,7 +39,8 @@ public abstract class Targovec {
 	
 	public static void startWork(Targovec[] targovci) {
 		for (int i = 0; i < targovci.length; i++) {
-			targovci[i].addProducts(price);
+			int tempPrice = rand.nextInt((targovci[i].getMoney()));
+			targovci[i].addProducts(tempPrice);
 		}
 	}
 	
@@ -78,6 +85,11 @@ public abstract class Targovec {
 			this.products[this.products.length - this.freePlacesForProducts--] = tempProduct;
 			price -= tempProduct.getProductPrice();
 		}
+		
+		// TODO sorting
+//		for (int i = 0; i < this.products.length - getFreePlacesForProducts(); i++) {
+//			
+//		}
 	}
 	
 	public void sellAllGoodsFromTargovskiObekt(int number) {
@@ -94,8 +106,15 @@ public abstract class Targovec {
 		}
 	}
 	
-	public void payTax(int tax) {
-		this.money -= tax;
+	public void payTax() {
+		int totalTax = 0;
+		for (int i = 0; i < targovskiObekt.length; i++) {
+			totalTax += targovskiObekt[i].getCountryTax();
+		}
+		System.out.println("Total tax for: " + this.getName() + " is " + totalTax);
+		System.out.println("Money before tax: " + getMoney());
+		setMoney(getMoney() - totalTax);
+		System.out.println("Money after tax: " + getMoney());
 	}
 	
 	public void printBallance() {
