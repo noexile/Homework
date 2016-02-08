@@ -13,6 +13,20 @@ public class Demo {
 	static final String SEAT = "seat";
 	static final String ENGINE = "engine";
 	static final String FRAME = "frame";
+	
+	static int currentTyreNumber = 0;
+	static int currentSeatNumber = 0;
+	static int currentEngineNumber = 0;
+	static int currentFrameNumber = 0;
+	
+	static HashMap<String, Integer> parts = new HashMap<String, Integer>();
+	
+	static {
+		parts.put("tyre", 2);
+		parts.put("seat", 3);
+		parts.put("engine", 7);
+		parts.put("frame", 5);
+	}
 
 	public static void main(String[] args) throws InterruptedException {
 		
@@ -37,26 +51,11 @@ public class Demo {
 	
 	private static class Builder extends Thread {
 		
-		HashMap<String, Integer> parts;
-		int currentTyreNumber = 0;
-		int currentSeatNumber = 0;
-		int currentEngineNumber = 0;
-		int currentFrameNumber = 0;
-		
-		
-		Builder() {
-			this.parts = new HashMap<String, Integer>();
-			this.parts.put("tyre", 2);
-			this.parts.put("seat", 3);
-			this.parts.put("engine", 7);
-			this.parts.put("frame", 5);
-		}
-		
 		public void run() {
 			
-				for (Map.Entry<String, Integer> map : parts.entrySet()) {
-					System.out.println(Thread.currentThread().getId() + " starts building.");
-					while(true) {
+			for (Map.Entry<String, Integer> map : parts.entrySet()) {
+				System.out.println(Thread.currentThread().getId() + " starts building.");
+				while(true) {
 					for (int i = 0; i < map.getValue(); i++) {
 						
 						try {
@@ -65,7 +64,7 @@ public class Demo {
 							
 							
 						} catch (InterruptedException e) {
-
+	
 						}
 						if (map.getKey().equalsIgnoreCase(TYRE) && currentTyreNumber != NEEDED_TYRES) {
 							currentTyreNumber++;
