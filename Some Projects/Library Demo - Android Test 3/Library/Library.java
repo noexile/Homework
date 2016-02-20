@@ -271,7 +271,7 @@ public class Library extends Thread {
 		
 		Transport transport = getMailSession.getTransport("smtp");
 		
-		transport.connect("smtp.gmail.com", "*****", "*****");
+		transport.connect("smtp.gmail.com", "username", "password");
 		transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
 		transport.close();
 	}
