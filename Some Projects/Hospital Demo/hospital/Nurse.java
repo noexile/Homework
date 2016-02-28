@@ -21,10 +21,11 @@ public class Nurse extends Person implements Runnable {
 	
 	@Override
 	public void run() {
+		System.out.println("nurse " + Thread.currentThread().getName());
 		giveMedicine();
 	}
 	
-	synchronized private void giveMedicine() {
+	private void giveMedicine() {
 		for (Map.Entry<String, ArrayList<Carton>> entryMap : this.hospital.getHospitalCartons().entrySet()) {
 			if (entryMap.getKey().equalsIgnoreCase(department)) {
 				ArrayList<Carton> cartonList = entryMap.getValue();
@@ -50,11 +51,6 @@ public class Nurse extends Person implements Runnable {
 				}
 			}
 		}
-		
-		try {
-			Thread.currentThread().wait(); // nurse finishes work for the day
-		} catch (InterruptedException e) {}
-		
 	}
 	
 	// getters and setters

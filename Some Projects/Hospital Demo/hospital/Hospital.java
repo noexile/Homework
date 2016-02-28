@@ -33,10 +33,11 @@ public class Hospital implements Runnable {
 	private HashMap<String, ArrayList<Room>> hospitalRooms; // department name - list of rooms in the department
 	private ArrayList<Doctor> doctorsInTheHospital;
 	private ArrayList<Nurse> nursesInTheHospital;
+	private ArrayList<Thread> hospitalPersonel;
 	
 
 	// constructors
-	Hospital() {
+	public Hospital() {
 		this.treatmentsForDepartments = new HashMap<String, ArrayList<String>>();
 		this.hospitalFreePlaces = MAX_BEDS_IN_HOSPITAL;
 		this.waitingPatients = new ConcurrentLinkedQueue<>();
@@ -44,6 +45,7 @@ public class Hospital implements Runnable {
 		this.hospitalRooms = new HashMap<>();
 		this.doctorsInTheHospital = new ArrayList<>();
 		this.nursesInTheHospital = new ArrayList<>();
+		this.hospitalPersonel = new ArrayList<>();
 		
 		addRoomsToHospital();
 		generateDiagnosisForDepartments();
@@ -53,23 +55,29 @@ public class Hospital implements Runnable {
 	
 	
 	// methods
-	
-	// TODO
 	@Override
 	public void run() {
 		
 		int dayNumber = 1;
 		long startTime = System.currentTimeMillis();
-		System.out.println("--------------- DAY " + dayNumber + " STARTS ---------------");
+		
 		while(true) {
-			doctorsStartWork();
-			nursesStartWork();
+			System.out.println("--------------- DAY " + dayNumber++ + " STARTS ---------------");
 			
-			if (startTime - System.currentTimeMillis() < TIME_IN_ONE_DAY) {
+			addNewPatients(); // adds new patients in the waiting list
+			System.out.println("faa");
+			personalStartWork(); // all personal start work
+			System.out.println("haa");
+			
+			if (System.currentTimeMillis() - startTime < TIME_IN_ONE_DAY) {
 				while (true) {
-					if (startTime - System.currentTimeMillis() >= TIME_IN_ONE_DAY) {
-						dayNumber++;
-						notifyAll();
+
+//					System.out.println(System.currentTimeMillis() - startTime);
+					if (System.currentTimeMillis() - startTime >= TIME_IN_ONE_DAY) {
+						
+						endOfDay(); // all personal stop work
+						
+						startTime = System.currentTimeMillis();
 						break;
 					}					
 				}
@@ -78,30 +86,55 @@ public class Hospital implements Runnable {
 		
 	}
 
-	// TODO
-	private void nursesStartWork() {
-		
+	private void endOfDay() {
+		for (int i = 0; i < this.hospitalPersonel.size(); i++) {
+			if (this.hospitalPersonel.get(i).isAlive()) {
+				this.hospitalPersonel.get(i).interrupt();
+			}
+			this.hospitalPersonel.remove(i);
+		}
 	}
 
-	
-	// TODO
-	private void doctorsStartWork() {
+
+	// all personal start working
+	public void personalStartWork() {
+		for (int i = 0; i < this.doctorsInTheHospital.size(); i++) {
+			this.hospitalPersonel.add(new Thread(this.doctorsInTheHospital.get(i)));
+		}
 		
+		for (int i = 0; i < this.nursesInTheHospital.size(); i++) {
+			this.hospitalPersonel.add(new Thread(this.nursesInTheHospital.get(i)));
+		}
+		
+		for (int i = 0; i < this.hospitalPersonel.size(); i++) {
+			this.hospitalPersonel.get(i).start();
+		}
 	}
 
 	private void generateNursesForTheHospital() {
-		this.nursesInTheHospital.add(new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.KARDIOLOGIA.toString().toLowerCase(), this));
-		this.nursesInTheHospital.add(new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.KARDIOLOGIA.toString().toLowerCase(), this));
-		this.nursesInTheHospital.add(new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.ORTOPEDIA.toString().toLowerCase(), this));
-		this.nursesInTheHospital.add(new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.ORTOPEDIA.toString().toLowerCase(), this));
-		this.nursesInTheHospital.add(new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.VIRUSOLOGIA.toString().toLowerCase(), this));
-		this.nursesInTheHospital.add(new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.VIRUSOLOGIA.toString().toLowerCase(), this));
+		Nurse nurseOne = new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.KARDIOLOGIA.toString().toLowerCase(), this);
+		Nurse nurseTwo = new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.KARDIOLOGIA.toString().toLowerCase(), this);
+		Nurse nurseThree = new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.ORTOPEDIA.toString().toLowerCase(), this);
+		Nurse nurseFour = new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.ORTOPEDIA.toString().toLowerCase(), this);
+		Nurse nurseFive = new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.VIRUSOLOGIA.toString().toLowerCase(), this);
+		Nurse nurseSix = new Nurse(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)], generateTelephone(), rand.nextInt(31) + 10, DepartmentNames.VIRUSOLOGIA.toString().toLowerCase(), this);
+		
+		this.nursesInTheHospital.add(nurseOne);
+		this.nursesInTheHospital.add(nurseTwo);
+		this.nursesInTheHospital.add(nurseThree);
+		this.nursesInTheHospital.add(nurseFour);
+		this.nursesInTheHospital.add(nurseFive);
+		this.nursesInTheHospital.add(nurseSix);	
 	}
 
 	private void generateDoctorsForTheHospital() {
-		this.doctorsInTheHospital.add(new Doctor("Queen", "Lechitelkata", generateTelephone(), DepartmentNames.KARDIOLOGIA.toString().toLowerCase(), this));
-		this.doctorsInTheHospital.add(new Doctor("Doug", "Ross", generateTelephone(), DepartmentNames.ORTOPEDIA.toString().toLowerCase(), this));
-		this.doctorsInTheHospital.add(new Doctor("Charles", "Xavier", generateTelephone(), DepartmentNames.VIRUSOLOGIA.toString().toLowerCase(), this));
+		Doctor queen = new Doctor("Queen", "Lechitelkata", generateTelephone(), DepartmentNames.KARDIOLOGIA.toString().toLowerCase(), this);
+		Doctor ross = new Doctor("Doug", "Ross", generateTelephone(), DepartmentNames.ORTOPEDIA.toString().toLowerCase(), this);
+		Doctor xavier = new Doctor("Charles", "Xavier", generateTelephone(), DepartmentNames.VIRUSOLOGIA.toString().toLowerCase(), this);
+		
+		this.doctorsInTheHospital.add(queen);
+		this.doctorsInTheHospital.add(ross);
+		this.doctorsInTheHospital.add(xavier);
 	}
 
 	synchronized public void hospitalizePatients(ConcurrentLinkedQueue<Patient> waitingPatients) {	

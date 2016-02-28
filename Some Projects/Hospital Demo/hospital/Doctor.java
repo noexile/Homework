@@ -2,7 +2,7 @@ package hospital;
 
 import java.util.ArrayList;
 
-public class Doctor extends Person implements Runnable{	
+public class Doctor extends Person implements Runnable {	
 	
 	final static int MAX_PATIENTS_PER_DOCTOR = 5;
 	private final int TIME_FOR_VISITING_PATIENT = 1000;
@@ -25,6 +25,7 @@ public class Doctor extends Person implements Runnable{
 	// methods
 	@Override
 	public void run() {
+		System.out.println("doctor " + Thread.currentThread().getName());
 		makeVisitation();
 	}
 	
@@ -32,7 +33,7 @@ public class Doctor extends Person implements Runnable{
 		return new TreatmentPlan();
 	}
 	
-	synchronized private void makeVisitation() {		
+	private void makeVisitation() {		
 		for (int i = 0; i < this.patients.size(); i++) {
 			if (this.patients.get(i).getTreatmentPlan().getDaysForTreatment() == 0) {
 				dischargePatient(this.patients.get(i));
@@ -50,13 +51,10 @@ public class Doctor extends Person implements Runnable{
 				this.isFree = false;
 				Thread.currentThread().sleep(TIME_FOR_VISITING_PATIENT); // doctor visits patient for 1 hour
 				this.isFree = true;
-			} catch (InterruptedException e) {}
+			} catch (InterruptedException e) {
+				this.isFree = true;
+			}
 		}
-		
-		try {
-			this.setFree(true);
-			Thread.currentThread().wait(); // doctor finishes work for today
-		} catch (InterruptedException e) {}
 	}
 	
 	private void dischargePatient(Patient patient) {
