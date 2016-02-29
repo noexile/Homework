@@ -11,6 +11,8 @@ public class Hospital implements Runnable {
 	private static final int TIME_IN_ONE_DAY = 5000;
 	private Random rand = new Random();
 	
+	private int dayNumber = 1;
+	
 	private final int DEPARTMENT_NUMBER = 3;
 	private final int MAX_ROOMS_PER_DEPARTMENT = 10;
 	private final int MAX_BEDS_PER_ROOM = Room.MAX_BEDS_PER_ROOM;
@@ -48,50 +50,47 @@ public class Hospital implements Runnable {
 		this.hospitalPersonel = new ArrayList<>();
 		
 		addRoomsToHospital();
+		addCartonsListToDepartments();
 		generateDiagnosisForDepartments();
 		generateDoctorsForTheHospital();
 		generateNursesForTheHospital();
 	}
 	
-	
+
 	// methods
 	@Override
 	public void run() {
-		
-		int dayNumber = 1;
-		long startTime = System.currentTimeMillis();
-		
-		while(true) {
-			System.out.println("--------------- DAY " + dayNumber++ + " STARTS ---------------");
-			
-			addNewPatients(); // adds new patients in the waiting list
-			System.out.println("faa");
-			personalStartWork(); // all personal start work
-			System.out.println("haa");
-			
-			if (System.currentTimeMillis() - startTime < TIME_IN_ONE_DAY) {
-				while (true) {
-
-//					System.out.println(System.currentTimeMillis() - startTime);
-					if (System.currentTimeMillis() - startTime >= TIME_IN_ONE_DAY) {
-						
-						endOfDay(); // all personal stop work
-						
-						startTime = System.currentTimeMillis();
-						break;
-					}					
-				}
-			}
-		}
-		
+		startDay();	
 	}
 
-	private void endOfDay() {
+
+	void endOfDay() {
 		for (int i = 0; i < this.hospitalPersonel.size(); i++) {
 			if (this.hospitalPersonel.get(i).isAlive()) {
 				this.hospitalPersonel.get(i).interrupt();
 			}
-			this.hospitalPersonel.remove(i);
+		}
+		this.hospitalPersonel.clear();
+		makeCartonsUnchecked();	
+		startDay();
+	}
+
+	private void startDay() {
+		GlobalTime time = new GlobalTime(this);
+		time.start();
+		
+		System.out.println("--------------- DAY " + dayNumber++ + " STARTS ---------------");
+		
+		addNewPatients(); // adds new patients in the waiting list
+		hospitalizePatients(this.waitingPatients);
+		personalStartWork(); // all personal start work
+	}
+
+	private void makeCartonsUnchecked() {
+		for(Map.Entry<String, ArrayList<Carton>> entry : this.hospitalCartons.entrySet()) {
+			for (int i = 0; i < entry.getValue().size(); i++) {
+				entry.getValue().get(i).getPatient().setChecked(false);
+			}
 		}
 	}
 
@@ -160,12 +159,16 @@ public class Hospital implements Runnable {
 					return;
 				} 
 			}
-						
+			
+//			System.out.println("tuk");
 			Doctor freeDoctor = findFreeDoctor(); // checks and returns a free doctor 
 			TreatmentPlan treatmentPlan = freeDoctor.createTreatmentPlan(); // doctor makes treatment plan
+			String department = getDepartment(treatmentPlan); // gets the department for witch the patient will be placed depending on his treatment plan
+			patient.setTreatmentPlan(treatmentPlan);
 			
-			Room patientRoom = checkForAvailableRoomForPatient(patient, treatmentPlan);
-			
+//			System.out.println("da be da");
+			Room patientRoom = checkForAvailableRoomForPatient(patient, treatmentPlan, department);
+
 			if (patientRoom == null) { // checks if there is a valid room for the patient
 				try {
 					throw new NoFreePlacesInTheHospitalException();
@@ -176,7 +179,6 @@ public class Hospital implements Runnable {
 				}
 			}
 			
-			String department = getDepartment(treatmentPlan); // gets the department for witch the patient will be placed depending on his treatment plan
 			Carton patientCarton = new Carton(patient, freeDoctor, treatmentPlan, patientRoom);
 			this.hospitalCartons.get(department).add(patientCarton); // adds carton to the hospital
 			patientRoom.setFreePlaces(patientRoom.getFreePlaces() - 1); // removes 1 free place from the room
@@ -185,6 +187,12 @@ public class Hospital implements Runnable {
 			waitingPatients.poll(); // removes the patient from the wait list
 			freeDoctor.getPatients().add(patient); // adds patient to doctor list
 			patient.setCarton(patientCarton);
+			
+//			'Пациент <firstName> <lastName> от пол <gender> e приет с диагноза <diagnoseName>. Лекуващ лекар: д-р <firstName> <lastName>. '
+			String patientInfo = "Patient " + patient.getFirstName() + " " + patient.getLastName() + " with gender: " + 
+					(patient.isMale()? "male" : "female") + " was accepted in the hospital with diagnosis: " + treatmentPlan.getDiagnosis() + 
+					". Assigned doctor: " + freeDoctor.getFirstName() + " " + freeDoctor.getLastName();
+			System.out.println(patientInfo);
 		}
 	}
 	
@@ -205,28 +213,37 @@ public class Hospital implements Runnable {
 		this.treatmentsForDepartments.get(DepartmentNames.VIRUSOLOGIA.toString().toLowerCase()).add(TreatmentPlan.vazmozhniDiagnozi[4]); // 4 - Sopoli
 	}
 	
-	private Room checkForAvailableRoomForPatient(Patient patient, TreatmentPlan treatmentPlan) {
-		Room room = null;
+	private void addCartonsListToDepartments() {
+		this.hospitalCartons.put(DepartmentNames.KARDIOLOGIA.toString().toLowerCase(), new ArrayList<Carton>());
+		this.hospitalCartons.put(DepartmentNames.ORTOPEDIA.toString().toLowerCase(), new ArrayList<Carton>());
+		this.hospitalCartons.put(DepartmentNames.VIRUSOLOGIA.toString().toLowerCase(), new ArrayList<Carton>());
+	}
+
+	private Room checkForAvailableRoomForPatient(Patient patient, TreatmentPlan treatmentPlan, String department) {
 		boolean isMale = patient.isMale();
-		
+	
 		for (Map.Entry<String, ArrayList<Room>> entryRooms : this.hospitalRooms.entrySet()) {
-			if (entryRooms.getKey().equalsIgnoreCase(treatmentPlan.getDiagnosis())) {
+			if (entryRooms.getKey().equalsIgnoreCase(department)) {
 				ArrayList<Room> departmentRooms = entryRooms.getValue();
 				for (int i = 0; i < departmentRooms.size(); i++) {
 					if (departmentRooms.get(i).getFreePlaces() == 0) {
 						continue;
 					}
 					
+					if (departmentRooms.get(i).getFreePlaces() == Room.MAX_BEDS_PER_ROOM) {
+						return departmentRooms.get(i);
+					}
+					
 					for (int j = 0; j < departmentRooms.get(i).getPatients().size(); j++) {
 						if (departmentRooms.get(j).getPatients().get(j).isMale() == isMale) {
-							return room;
+							return departmentRooms.get(i);
 						}
 					}
 				}
 			}
 		}
 		
-		return room;
+		return null;
 	}
 
 	String getDepartment(TreatmentPlan treatmentPlan) {
@@ -261,7 +278,7 @@ public class Hospital implements Runnable {
 		}
 		
 		for (int i = 0; i < numberOfFemalePatients; i++) {
-			this.waitingPatients.offer(new Patient(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)] , generateTelephone() , (int)(rand.nextInt(101) + 20) , true));
+			this.waitingPatients.offer(new Patient(this.womenFirstNames[rand.nextInt(this.womenFirstNames.length)] , this.womenLastNames[rand.nextInt(this.womenLastNames.length)] , generateTelephone() , (int)(rand.nextInt(101) + 20) , false));
 		}
 	}
 	
@@ -290,6 +307,16 @@ public class Hospital implements Runnable {
 			this.hospitalRooms.get(DepartmentNames.ORTOPEDIA.toString().toLowerCase()).add(new Room(ortopediaRoomNumber++));
 			this.hospitalRooms.get(DepartmentNames.VIRUSOLOGIA.toString().toLowerCase()).add(new Room(virusologiaRoomNumber++));
 		}
+		
+		// print the creatin of the rooms
+//		for(Map.Entry<String, ArrayList<Room>> entry : this.hospitalRooms.entrySet()) {
+//			
+//			System.out.println(entry.getKey());
+//			for (int i = 0; i < entry.getValue().size(); i++) {
+//				System.out.println("- " + entry.getValue().get(i).getNumber());
+//			}
+//			
+//		}
 	}
 
 	// getters and setters

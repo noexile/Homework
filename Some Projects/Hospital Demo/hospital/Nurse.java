@@ -20,12 +20,11 @@ public class Nurse extends Person implements Runnable {
 	// methods
 	
 	@Override
-	public void run() {
-		System.out.println("nurse " + Thread.currentThread().getName());
+	public synchronized void run() {
 		giveMedicine();
 	}
 	
-	private void giveMedicine() {
+	synchronized private void giveMedicine() {
 		for (Map.Entry<String, ArrayList<Carton>> entryMap : this.hospital.getHospitalCartons().entrySet()) {
 			if (entryMap.getKey().equalsIgnoreCase(department)) {
 				ArrayList<Carton> cartonList = entryMap.getValue();
@@ -33,15 +32,15 @@ public class Nurse extends Person implements Runnable {
 					if (cartonList.get(i).getPatient().isChecked() == true) {
 						continue;
 					}
-					
-					String printPatient = "Sestra " + getFirstName() + " " + getLastName() + "gave patient " + 
-							cartonList.get(i).getPatient().getFirstName() + " " + cartonList.get(i).getPatient().getFirstName() + " in room " + 
+//					System.out.println("lekarstva size: " + cartonList.get(i).getPatient().getTreatmentPlan().getLekarstva().size());
+					String printPatient = "Sestra " + getFirstName() + " " + getLastName() + " gave patient " + 
+							cartonList.get(i).getPatient().getFirstName() + " " + cartonList.get(i).getPatient().getLastName() + " in room " + 
 							cartonList.get(i).getPatient().getPatientRoom().getNumber() + " from department " + 
 							entryMap.getKey() + " gave the following medicine: ";
 					System.out.print(printPatient);
-					for (int j = 0; j < cartonList.get(i).getPatient().getTreatmentPlan().getLekarstva().length; j++) {
-						System.out.print(cartonList.get(i).getPatient().getTreatmentPlan().getLekarstva()[i]);
-						if ((j + 1) < cartonList.get(i).getPatient().getTreatmentPlan().getLekarstva().length) {
+					for (int j = 0; j < cartonList.get(i).getPatient().getTreatmentPlan().getLekarstva().size(); j++) {
+						System.out.print(cartonList.get(i).getPatient().getTreatmentPlan().getLekarstva().get(j));
+						if ((j + 1) < cartonList.get(i).getPatient().getTreatmentPlan().getLekarstva().size()) {
 							 System.out.print(", ");
 						}
 					}

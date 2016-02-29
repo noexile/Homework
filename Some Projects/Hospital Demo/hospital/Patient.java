@@ -48,6 +48,10 @@ public class Patient extends Person {
 	TreatmentPlan getTreatmentPlan() {
 		return treatmentPlan;
 	}
+	
+	void setTreatmentPlan(TreatmentPlan treatmentPlan) {
+		this.treatmentPlan = treatmentPlan;
+	}
 
 	Carton getCarton() {
 		return carton;

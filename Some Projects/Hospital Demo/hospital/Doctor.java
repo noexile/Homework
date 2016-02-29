@@ -24,8 +24,7 @@ public class Doctor extends Person implements Runnable {
 	
 	// methods
 	@Override
-	public void run() {
-		System.out.println("doctor " + Thread.currentThread().getName());
+	public synchronized void run() {
 		makeVisitation();
 	}
 	
@@ -37,16 +36,16 @@ public class Doctor extends Person implements Runnable {
 		for (int i = 0; i < this.patients.size(); i++) {
 			if (this.patients.get(i).getTreatmentPlan().getDaysForTreatment() == 0) {
 				dischargePatient(this.patients.get(i));
-				
+				continue;
 			}
 			
-			String printPatient = "Doctor " + getFirstName() + " " + getLastName() + " visited patient " + this.patients.get(i).getFirstName() + 
+			String printPatient = "Doctor " + getFirstName() + " " + getLastName() + " visited patient " + this.patients.get(i).getFirstName() + " " +
 					this.patients.get(i).getLastName() + " in room " + this.patients.get(i).getCarton().getRoom().getNumber() + " from department " + 
-					this.specialization;					
-			System.out.println(printPatient);
+					this.specialization + ". ";					
+			System.out.print(printPatient);
 			
 			this.patients.get(i).getTreatmentPlan().setDaysForTreatment(this.patients.get(i).getTreatmentPlan().getDaysForTreatment() - 1); // visits the patient and removes 1 day for stay		
-			
+			System.out.println("Days left for treatment: " + this.patients.get(i).getTreatmentPlan().getDaysForTreatment());
 			try {
 				this.isFree = false;
 				Thread.currentThread().sleep(TIME_FOR_VISITING_PATIENT); // doctor visits patient for 1 hour

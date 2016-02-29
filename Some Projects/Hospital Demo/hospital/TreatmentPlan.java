@@ -1,5 +1,6 @@
 package hospital;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class TreatmentPlan {
@@ -11,7 +12,7 @@ public class TreatmentPlan {
 	private Random rand = new Random();
 	
 	private String diagnosis;
-	private String[] lekarstva;
+	private ArrayList<String> lekarstva;
 	private int daysForTreatment;
 	
 
@@ -19,10 +20,11 @@ public class TreatmentPlan {
 	public TreatmentPlan() {
 		this.daysForTreatment = rand.nextInt(6 - 3) + 3;
 		this.diagnosis = vazmozhniDiagnozi[rand.nextInt(3)];
-		this.lekarstva = new String[rand.nextInt(3)];
-		for (int i = 0; i < this.lekarstva.length; i++) {
-			this.lekarstva[i] = this.listSLekarstva[rand.nextInt(this.listSLekarstva.length)];
-		}
+		this.lekarstva = new ArrayList<>();
+		
+		for (int i = 0; i < rand.nextInt(5 - 2) + 2; i++) {
+			this.lekarstva.add(this.listSLekarstva[rand.nextInt(this.listSLekarstva.length)]);
+		}		
 	}
 	
 	
@@ -31,7 +33,7 @@ public class TreatmentPlan {
 		return diagnosis;
 	}
 	
-	String[] getLekarstva() {
+	ArrayList<String> getLekarstva() {
 		return lekarstva;
 	}
 	
