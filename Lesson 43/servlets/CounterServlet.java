@@ -1,4 +1,4 @@
-package hw;
+package servlets;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -18,13 +18,13 @@ import javax.servlet.http.HttpServletResponse;
 public class CounterServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	File file;
-	int counter = 1;
+	int counter = 0;
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		
 		PrintWriter writer = response.getWriter();
 		String name = Thread.currentThread().getName();
-		writer.append("Instance number: ").append(String.valueOf(counter++)).append(" ").append(name);
+		writer.append("Instance number: ").append(String.valueOf(++counter)).append(" ").append(name);
 		
 		if (file != null) {
 			
