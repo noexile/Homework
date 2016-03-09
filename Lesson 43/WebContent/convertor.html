@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Number convertоr</title>
+</head>
+<body>
+	<h3>Number converter:</h3>
+	<form method="post" action="ConvertorServlet">
+		<input type="text" name="number">
+		<br/>
+		<select name="from">
+			<option value="centimeter">centimeter</option>
+			<option value="inch">inch</option>
+			<option value="foot">foot</option>
+			<option value="yard">yard</option>
+			<option value="kilometer">kilometer</option>
+			<option value="mile">mile</option>
+		</select>
+		to
+		<select name="to">
+			<option value="centimeter">centimeter</option>
+			<option value="inch">inch</option>
+			<option value="foot">foot</option>
+			<option value="yard">yard</option>
+			<option value="kilometer">kilometer</option>
+			<option value="mile">mile</option>
+		</select>
+		<br/>
+		<input type="submit" value="Convert">
+		<br/>
+	</form>
+</body>
+</html>
