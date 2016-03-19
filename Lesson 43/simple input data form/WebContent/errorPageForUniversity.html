@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Error</title>
+</head>
+<body>
+	<h1><font color="red">Error in input data! Please enter correct values!</font></h1>
+	<h2>Step 3/3</h2>
+	<h3>Please enter your University information as follows:</h3>
+	<form method="post" action="UniversityInformationServlet">
+		<table>
+			<tr>
+				<td>University Name:</td>
+				<td><input type="text" name="universityName"></td>
+			</tr>
+			<tr>
+				<td>Faculty:</td>
+				<td><input type="text" name="faculty"></td>
+			</tr>
+			<tr>
+				<td>Specialty:</td>
+				<td><input type="text" name="specialty"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="submit" value="Register" style="float: right;">
+					<input type="button" value="Back" OnClick="history.go( -1 );return true;" style="float: right;">
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>

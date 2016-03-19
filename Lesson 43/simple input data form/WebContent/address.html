@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Address</title>
+
+</head>
+<body>
+	<h2>Step 2/3</h2>
+	<h3>Please enter your address as follows:</h3>
+	<form method="post" action="AddressServlet">
+		<table>
+			<tr>
+				<td>Country:</td>
+				<td>
+					<select name="country">
+						<option value="bulgaria">Bulgaria</option>
+						<option value="murica">Murica</option>
+						<option value="germany">Germany</option>
+						<option value="belgium">Belgium</option>
+						<option value="russia">Russia</option>
+						<option value="australia">Australia</option>
+						<option value="noLand">No Man's Land</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>City:</td>
+				<td><input type="text" name="city"></td>
+			</tr>
+			<tr>
+				<td>Street:</td>
+				<td><input type="text" name="street"></td>
+			</tr>
+			<tr>
+				<td></td>
+				<td>
+					<input type="submit" value="Next" style="float: right;">
+					<input type="button" value="Back" OnClick="history.go( -1 );return true;" style="float: right;">
+				</td>
+			</tr>
+		</table>
+	</form>
+</body>
+</html>
